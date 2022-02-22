@@ -2,7 +2,10 @@ package uk.tw.energy.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import uk.tw.energy.dao.AccountRepo;
 import uk.tw.energy.dao.MeterReadingRepo;
@@ -29,18 +32,16 @@ public class PricePlanComparatorControllerTest {
     private static final String PRICE_PLAN_2_ID = "best-supplier";
     private static final String PRICE_PLAN_3_ID = "second-best-supplier";
     private static final String SMART_METER_ID = "smart-meter-id";
+    @InjectMocks
     private PricePlanComparatorController controller;
-    private MeterReadingService meterReadingService;
+    @Mock
     private AccountService accountService;
-
     @Mock
-    private AccountRepo accountRepo;
+    private PricePlanService pricePlanService;
     @Mock
-    private MeterReadingRepo meterReadingRepo;
-
+    private MeterReadingService meterReadingService;
     @BeforeEach
     public void setUp() {
-        meterReadingService = new MeterReadingService(meterReadingRepo);
         PricePlan pricePlan1 = new PricePlan(PRICE_PLAN_1_ID, null, BigDecimal.TEN, null);
         PricePlan pricePlan2 = new PricePlan(PRICE_PLAN_2_ID, null, BigDecimal.ONE, null);
         PricePlan pricePlan3 = new PricePlan(PRICE_PLAN_3_ID, null, BigDecimal.valueOf(2), null);
@@ -50,9 +51,7 @@ public class PricePlanComparatorControllerTest {
 
         Map<String, String> meterToTariffs = new HashMap<>();
         meterToTariffs.put(SMART_METER_ID, PRICE_PLAN_1_ID);
-        accountService = new AccountService(accountRepo);
-
-        controller = new PricePlanComparatorController(tariffService, accountService);
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
@@ -78,6 +77,7 @@ public class PricePlanComparatorControllerTest {
 
         ElectricityReading electricityReading = new ElectricityReading(Instant.now().minusSeconds(1800), BigDecimal.valueOf(35.0));
         ElectricityReading otherReading = new ElectricityReading(Instant.now(), BigDecimal.valueOf(3.0));
+        Mockito.doNothing().when(meterReadingService).storeReadings(Mockito.anyString(),Mockito.anyList());
         meterReadingService.storeReadings(SMART_METER_ID, Arrays.asList(electricityReading, otherReading));
 
         List<Map.Entry<String, BigDecimal>> expectedPricePlanToCost = new ArrayList<>();
@@ -94,6 +94,7 @@ public class PricePlanComparatorControllerTest {
 
         ElectricityReading electricityReading = new ElectricityReading(Instant.now().minusSeconds(2700), BigDecimal.valueOf(5.0));
         ElectricityReading otherReading = new ElectricityReading(Instant.now(), BigDecimal.valueOf(20.0));
+        Mockito.doNothing().when(meterReadingService).storeReadings(Mockito.anyString(),Mockito.anyList());
         meterReadingService.storeReadings(SMART_METER_ID, Arrays.asList(electricityReading, otherReading));
 
         List<Map.Entry<String, BigDecimal>> expectedPricePlanToCost = new ArrayList<>();
@@ -108,6 +109,7 @@ public class PricePlanComparatorControllerTest {
 
         ElectricityReading electricityReading = new ElectricityReading(Instant.now().minusSeconds(3600), BigDecimal.valueOf(25.0));
         ElectricityReading otherReading = new ElectricityReading(Instant.now(), BigDecimal.valueOf(3.0));
+        Mockito.doNothing().when(meterReadingService).storeReadings(Mockito.anyString(),Mockito.anyList());
         meterReadingService.storeReadings(SMART_METER_ID, Arrays.asList(electricityReading, otherReading));
 
         List<Map.Entry<String, BigDecimal>> expectedPricePlanToCost = new ArrayList<>();
