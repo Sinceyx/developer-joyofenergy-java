@@ -2,7 +2,9 @@ package uk.tw.energy.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
+import uk.tw.energy.dao.AccountRepo;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
 import uk.tw.energy.service.AccountService;
@@ -30,6 +32,9 @@ public class PricePlanComparatorControllerTest {
     private MeterReadingService meterReadingService;
     private AccountService accountService;
 
+    @Mock
+    private AccountRepo accountRepo;
+
     @BeforeEach
     public void setUp() {
         meterReadingService = new MeterReadingService(new HashMap<>());
@@ -42,7 +47,7 @@ public class PricePlanComparatorControllerTest {
 
         Map<String, String> meterToTariffs = new HashMap<>();
         meterToTariffs.put(SMART_METER_ID, PRICE_PLAN_1_ID);
-        accountService = new AccountService(meterToTariffs);
+        accountService = new AccountService(accountRepo);
 
         controller = new PricePlanComparatorController(tariffService, accountService);
     }
