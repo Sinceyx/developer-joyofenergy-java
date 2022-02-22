@@ -2,8 +2,10 @@ package uk.tw.energy.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import uk.tw.energy.builders.MeterReadingsBuilder;
+import uk.tw.energy.dao.MeterReadingRepo;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.MeterReadings;
 import uk.tw.energy.service.MeterReadingService;
@@ -21,9 +23,12 @@ public class MeterReadingControllerTest {
     private MeterReadingController meterReadingController;
     private MeterReadingService meterReadingService;
 
+    @Mock
+    private MeterReadingRepo meterReadingRepo;
+
     @BeforeEach
     public void setUp() {
-        this.meterReadingService = new MeterReadingService(new HashMap<>());
+        this.meterReadingService = new MeterReadingService(meterReadingRepo);
         this.meterReadingController = new MeterReadingController(meterReadingService);
     }
 

@@ -1,4 +1,4 @@
-package uk.tw.energy.domain;
+package uk.tw.energy.po;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "account")
-public class Account {
+public class AccountPo {
 
     @Id
     @Column(name = "smart_meter_id",length = 64)

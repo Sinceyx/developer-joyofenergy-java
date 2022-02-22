@@ -1,9 +1,9 @@
 package uk.tw.energy.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import uk.tw.energy.domain.Account;
+import uk.tw.energy.po.AccountPo;
 
 import javax.persistence.Id;
-public interface AccountRepo extends JpaRepository<Account,Id> {
-    Account findBySmartMeterId(String smartMeterId);
+public interface AccountRepo extends JpaRepository<AccountPo,Id> {
+    AccountPo findBySmartMeterId(String smartMeterId);
 }

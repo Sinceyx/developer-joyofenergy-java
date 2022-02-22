@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
 import uk.tw.energy.dao.AccountRepo;
+import uk.tw.energy.dao.MeterReadingRepo;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
 import uk.tw.energy.service.AccountService;
@@ -34,10 +35,12 @@ public class PricePlanComparatorControllerTest {
 
     @Mock
     private AccountRepo accountRepo;
+    @Mock
+    private MeterReadingRepo meterReadingRepo;
 
     @BeforeEach
     public void setUp() {
-        meterReadingService = new MeterReadingService(new HashMap<>());
+        meterReadingService = new MeterReadingService(meterReadingRepo);
         PricePlan pricePlan1 = new PricePlan(PRICE_PLAN_1_ID, null, BigDecimal.TEN, null);
         PricePlan pricePlan2 = new PricePlan(PRICE_PLAN_2_ID, null, BigDecimal.ONE, null);
         PricePlan pricePlan3 = new PricePlan(PRICE_PLAN_3_ID, null, BigDecimal.valueOf(2), null);
