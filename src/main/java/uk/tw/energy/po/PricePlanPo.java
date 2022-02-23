@@ -66,6 +66,13 @@ public class PricePlanPo {
         this.peakTimeMultipliers = peakTimeMultipliers;
     }
 
+    public PricePlanPo(String energySupplier, String planName, BigDecimal unitRate, List<PeakTimeMultiplierPo> peakTimeMultipliers) {
+        this.energySupplier = energySupplier;
+        this.planName = planName;
+        this.unitRate = unitRate;
+        this.peakTimeMultipliers = peakTimeMultipliers;
+    }
+
     public PricePlan toPricePlan(){
         PricePlan pricePlan = new PricePlan(this.planName,this.getEnergySupplier(),this.unitRate,this.peakTimeMultipliers.stream().map(ele->new PricePlan.PeakTimeMultiplier(DayOfWeek.of(ele.getDayOfWeek()),ele.getMultiplier())).collect(Collectors.toList()));
         return pricePlan;

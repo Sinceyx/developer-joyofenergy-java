@@ -7,10 +7,10 @@ import java.util.List;
 
 public class PricePlan {
 
-    private final String energySupplier;
-    private final String planName;
-    private final BigDecimal unitRate; // unit price per kWh
-    private final List<PeakTimeMultiplier> peakTimeMultipliers;
+    private String energySupplier;
+    private String planName;
+    private BigDecimal unitRate; // unit price per kWh
+    private List<PeakTimeMultiplier> peakTimeMultipliers;
 
     public PricePlan(String planName, String energySupplier, BigDecimal unitRate, List<PeakTimeMultiplier> peakTimeMultipliers) {
         this.planName = planName;
@@ -39,6 +39,28 @@ public class PricePlan {
                 .orElse(unitRate);
     }
 
+    public List<PeakTimeMultiplier> getPeakTimeMultipliers() {
+        return peakTimeMultipliers;
+    }
+
+    public void setEnergySupplier(String energySupplier) {
+        this.energySupplier = energySupplier;
+    }
+
+    public void setPlanName(String planName) {
+        this.planName = planName;
+    }
+
+    public void setUnitRate(BigDecimal unitRate) {
+        this.unitRate = unitRate;
+    }
+
+    public void setPeakTimeMultipliers(List<PeakTimeMultiplier> peakTimeMultipliers) {
+        this.peakTimeMultipliers = peakTimeMultipliers;
+    }
+
+    public PricePlan() {
+    }
 
     public static class PeakTimeMultiplier {
 
@@ -47,6 +69,22 @@ public class PricePlan {
 
         public PeakTimeMultiplier(DayOfWeek dayOfWeek, BigDecimal multiplier) {
             this.dayOfWeek = dayOfWeek;
+            this.multiplier = multiplier;
+        }
+
+        public DayOfWeek getDayOfWeek() {
+            return dayOfWeek;
+        }
+
+        public void setDayOfWeek(DayOfWeek dayOfWeek) {
+            this.dayOfWeek = dayOfWeek;
+        }
+
+        public BigDecimal getMultiplier() {
+            return multiplier;
+        }
+
+        public void setMultiplier(BigDecimal multiplier) {
             this.multiplier = multiplier;
         }
     }

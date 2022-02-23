@@ -39,4 +39,9 @@ public class PeakTimeMultiplierPo {
     public void setMultiplier(BigDecimal multiplier) {
         this.multiplier = multiplier;
     }
+
+    public PeakTimeMultiplierPo(int dayOfWeek, BigDecimal multiplier) {
+        this.dayOfWeek = dayOfWeek;
+        this.multiplier = multiplier;
+    }
 }
