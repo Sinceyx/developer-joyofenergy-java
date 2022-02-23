@@ -1,8 +1,10 @@
 package uk.tw.energy.service;
 
 import org.springframework.stereotype.Service;
+import uk.tw.energy.dao.PricePlanRepo;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
+import uk.tw.energy.po.PricePlanPo;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,12 +18,12 @@ import java.util.stream.Collectors;
 @Service
 public class PricePlanService {
 
-    private final List<PricePlan> pricePlans;
     private final MeterReadingService meterReadingService;
+    private final PricePlanRepo pricePlanRepo;
 
-    public PricePlanService(List<PricePlan> pricePlans, MeterReadingService meterReadingService) {
-        this.pricePlans = pricePlans;
+    public PricePlanService(MeterReadingService meterReadingService, PricePlanRepo pricePlanRepo) {
         this.meterReadingService = meterReadingService;
+        this.pricePlanRepo = pricePlanRepo;
     }
 
     public Optional<Map<String, BigDecimal>> getConsumptionCostOfElectricityReadingsForEachPricePlan(String smartMeterId) {
@@ -30,9 +32,9 @@ public class PricePlanService {
         if (!electricityReadings.isPresent()) {
             return Optional.empty();
         }
-
+        List<PricePlanPo> pricePlans = pricePlanRepo.findAll();
         return Optional.of(pricePlans.stream().collect(
-                Collectors.toMap(PricePlan::getPlanName, t -> calculateCost(electricityReadings.get(), t))));
+                Collectors.toMap(PricePlanPo::getPlanName, t -> calculateCost(electricityReadings.get(), t.toPricePlan()))));
     }
 
     private BigDecimal calculateCost(List<ElectricityReading> electricityReadings, PricePlan pricePlan) {

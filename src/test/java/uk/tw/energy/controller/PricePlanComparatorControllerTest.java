@@ -7,8 +7,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import uk.tw.energy.dao.AccountRepo;
-import uk.tw.energy.dao.MeterReadingRepo;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
 import uk.tw.energy.service.AccountService;
@@ -47,7 +45,6 @@ public class PricePlanComparatorControllerTest {
         PricePlan pricePlan3 = new PricePlan(PRICE_PLAN_3_ID, null, BigDecimal.valueOf(2), null);
 
         List<PricePlan> pricePlans = Arrays.asList(pricePlan1, pricePlan2, pricePlan3);
-        PricePlanService tariffService = new PricePlanService(pricePlans, meterReadingService);
 
         Map<String, String> meterToTariffs = new HashMap<>();
         meterToTariffs.put(SMART_METER_ID, PRICE_PLAN_1_ID);
