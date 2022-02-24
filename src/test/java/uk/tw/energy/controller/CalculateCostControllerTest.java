@@ -21,7 +21,7 @@ public class CalculateCostControllerTest {
     }
 
     @Test
-    public void givenSmartMeterIdShouldReturnPrevWeekCost(){
+    public void givenSmartMeterIdShouldResponseOK(){
         assertThat(controller.calculatePrevWeekCost(SMART_METER_ID).getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
