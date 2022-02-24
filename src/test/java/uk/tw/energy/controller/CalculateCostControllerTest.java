@@ -6,6 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class CalculateCostControllerTest {
@@ -23,5 +25,11 @@ public class CalculateCostControllerTest {
     @Test
     public void givenSmartMeterIdShouldResponseOK(){
         assertThat(controller.calculatePrevWeekCost(SMART_METER_ID).getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void givenSmartMeterIdShouldReturnCostOfPrevWeek(){
+        BigDecimal expected = BigDecimal.ONE;
+        assertThat(controller.calculatePrevWeekCost(SMART_METER_ID).getBody()).isEqualTo(expected);
     }
 }
