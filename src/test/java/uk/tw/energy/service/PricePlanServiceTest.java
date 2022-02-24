@@ -7,21 +7,25 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import uk.tw.energy.dao.PricePlanRepo;
+import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.domain.PricePlan;
-import uk.tw.energy.po.PeakTimeMultiplierPo;
 import uk.tw.energy.po.PricePlanPo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.Instant;
+import java.util.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class PricePlanServiceTest {
 
+    private static final String PRICE_PLAN_1_ID = "PRICE_PLAN_1_ID";
+    private static final String PRICE_PLAN_2_ID = "PRICE_PLAN_2_ID";
+    private static final String PRICE_PLAN_3_ID = "PRICE_PLAN_3_ID";
     @Mock
     private PricePlanRepo pricePlanRepo;
+
+    @Mock
+    private MeterReadingService meterReadingService;
 
     @InjectMocks
     private PricePlanService service;
@@ -46,7 +50,36 @@ class PricePlanServiceTest {
     }
 
     @Test
-    void getConsumptionCostOfElectricityReadingsForEachPricePlan() {
+    void givenExistSmarterMeterIdShouldReturnConsumptionCostOfElectricityReadingsForEachPricePlan() {
+        ElectricityReading electricityReading = new ElectricityReading(Instant.now().minusSeconds(3600), BigDecimal.valueOf(15.0));
+        ElectricityReading otherReading = new ElectricityReading(Instant.now(), BigDecimal.valueOf(5.0));
+        Mockito.when(meterReadingService.getReadings(Mockito.anyString())).thenReturn(Optional.of(Arrays.asList(electricityReading,otherReading)));
 
+        List<PricePlanPo> fakePricePlan = makePricePlanList();
+        Mockito.when(pricePlanRepo.findAll()).thenReturn(fakePricePlan);
+        Map<String, BigDecimal> expectedPricePlanToCost = new HashMap<>();
+        expectedPricePlanToCost.put(PRICE_PLAN_1_ID, BigDecimal.valueOf(50.0));
+        expectedPricePlanToCost.put(PRICE_PLAN_2_ID, BigDecimal.valueOf(10.0));
+        expectedPricePlanToCost.put(PRICE_PLAN_3_ID, BigDecimal.valueOf(20.0));
+        Optional<Map<String, BigDecimal>> actual = service.getConsumptionCostOfElectricityReadingsForEachPricePlan("smartMeterId");
+        assertThat(actual.orElse(null)).isEqualTo(expectedPricePlanToCost);
+    }
+
+    @Test
+    void givenNotExistSmarterMeterIdShouldReturnOptionNull() {
+        Mockito.when(meterReadingService.getReadings(Mockito.anyString())).thenReturn(Optional.empty());
+        Optional<Map<String, BigDecimal>> actual = service.getConsumptionCostOfElectricityReadingsForEachPricePlan("smartMeterId");
+        assertThat(actual.isPresent()).isEqualTo(false);
+    }
+
+    private List<PricePlanPo> makePricePlanList() {
+        PricePlan pricePlan1 = new PricePlan(PRICE_PLAN_1_ID, null, BigDecimal.valueOf(5), null);
+        PricePlan pricePlan2 = new PricePlan(PRICE_PLAN_2_ID, null, BigDecimal.ONE, null);
+        PricePlan pricePlan3 = new PricePlan(PRICE_PLAN_3_ID, null, BigDecimal.valueOf(2), null);
+        List<PricePlanPo> pricePlanPos = new ArrayList<>();
+        pricePlanPos.add(PricePlanPo.build(pricePlan1));
+        pricePlanPos.add(PricePlanPo.build(pricePlan2));
+        pricePlanPos.add(PricePlanPo.build(pricePlan3));
+        return pricePlanPos;
     }
 }

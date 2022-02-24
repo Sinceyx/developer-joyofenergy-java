@@ -1,8 +1,13 @@
 package uk.tw.energy.po;
 
+import uk.tw.energy.domain.PricePlan;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
+/**
+ * @author xin.yu
+ */
 @Entity
 @Table(name = "price_plan_peak_time_multiplier")
 public class PeakTimeMultiplierPo {
@@ -15,6 +20,9 @@ public class PeakTimeMultiplierPo {
 
     @Column(name = "multiplier")
     private BigDecimal multiplier;
+
+    public PeakTimeMultiplierPo() {
+    }
 
     public Long getId() {
         return id;
@@ -43,5 +51,8 @@ public class PeakTimeMultiplierPo {
     public PeakTimeMultiplierPo(int dayOfWeek, BigDecimal multiplier) {
         this.dayOfWeek = dayOfWeek;
         this.multiplier = multiplier;
+    }
+    public static PeakTimeMultiplierPo build(PricePlan.PeakTimeMultiplier peakTimeMultiplier){
+        return new PeakTimeMultiplierPo(peakTimeMultiplier.getDayOfWeek().getValue(),peakTimeMultiplier.getMultiplier());
     }
 }

@@ -12,7 +12,6 @@ import uk.tw.energy.service.PricePlanService;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

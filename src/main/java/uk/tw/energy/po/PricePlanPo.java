@@ -5,7 +5,6 @@ import uk.tw.energy.domain.PricePlan;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,11 +19,17 @@ public class PricePlanPo {
     private String energySupplier;
     @Column(name = "plan_name")
     private String planName;
+    /**
+     * unit price per kWh
+     */
     @Column(name = "unit_rate")
-    private BigDecimal unitRate; // unit price per kWh
+    private BigDecimal unitRate;
     @OneToMany(targetEntity = PeakTimeMultiplierPo.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "price_plan_id")
     private List<PeakTimeMultiplierPo> peakTimeMultipliers;
+
+    public PricePlanPo() {
+    }
 
     public Long getPricePlanId() {
         return pricePlanId;
@@ -73,8 +78,7 @@ public class PricePlanPo {
         this.peakTimeMultipliers = peakTimeMultipliers;
     }
 
-    public PricePlan toPricePlan(){
-        PricePlan pricePlan = new PricePlan(this.planName,this.getEnergySupplier(),this.unitRate,this.peakTimeMultipliers.stream().map(ele->new PricePlan.PeakTimeMultiplier(DayOfWeek.of(ele.getDayOfWeek()),ele.getMultiplier())).collect(Collectors.toList()));
-        return pricePlan;
+    public static PricePlanPo build(PricePlan pricePlan){
+        return new PricePlanPo(pricePlan.getEnergySupplier(), pricePlan.getPlanName(), pricePlan.getUnitRate(),pricePlan.getPeakTimeMultipliers()!=null&&!pricePlan.getPeakTimeMultipliers().isEmpty()?pricePlan.getPeakTimeMultipliers().stream().map(PeakTimeMultiplierPo::build).collect(Collectors.toList()):null);
     }
 }

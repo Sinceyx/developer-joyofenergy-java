@@ -1,5 +1,8 @@
 package uk.tw.energy.domain;
 
+import uk.tw.energy.po.PeakTimeMultiplierPo;
+import uk.tw.energy.po.PricePlanPo;
+
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -9,7 +12,10 @@ public class PricePlan {
 
     private String energySupplier;
     private String planName;
-    private BigDecimal unitRate; // unit price per kWh
+    /**
+     * unit price per kWh
+     */
+    private BigDecimal unitRate;
     private List<PeakTimeMultiplier> peakTimeMultipliers;
 
     public PricePlan(String planName, String energySupplier, BigDecimal unitRate, List<PeakTimeMultiplier> peakTimeMultipliers) {
@@ -19,6 +25,15 @@ public class PricePlan {
         this.peakTimeMultipliers = peakTimeMultipliers;
     }
 
+    public PricePlan(String planName,String energySupplier,BigDecimal unitRate){
+        this.planName = planName;
+        this.energySupplier = energySupplier;
+        this.unitRate = unitRate;
+    }
+
+    public static PricePlan build(PricePlanPo po){
+        return new PricePlan(po.getPlanName(),po.getEnergySupplier(),po.getUnitRate());
+    }
     public String getEnergySupplier() {
         return energySupplier;
     }
@@ -58,10 +73,6 @@ public class PricePlan {
     public void setPeakTimeMultipliers(List<PeakTimeMultiplier> peakTimeMultipliers) {
         this.peakTimeMultipliers = peakTimeMultipliers;
     }
-
-    public PricePlan() {
-    }
-
     public static class PeakTimeMultiplier {
 
         DayOfWeek dayOfWeek;
@@ -86,6 +97,10 @@ public class PricePlan {
 
         public void setMultiplier(BigDecimal multiplier) {
             this.multiplier = multiplier;
+        }
+
+        public static PeakTimeMultiplier build(PeakTimeMultiplierPo po){
+            return new PeakTimeMultiplier(DayOfWeek.of(po.getDayOfWeek()),po.getMultiplier());
         }
     }
 }
