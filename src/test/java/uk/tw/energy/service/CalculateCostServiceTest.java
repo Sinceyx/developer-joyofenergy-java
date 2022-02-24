@@ -24,6 +24,8 @@ public class CalculateCostServiceTest {
     private CalculateCostService service;
     @Mock
     private MeterReadingService meterReadingService;
+    @Mock
+    private PricePlanService pricePlanService;
 
     private static final String SMART_METER_ID = "SMART_METER_ID";
 
@@ -41,8 +43,8 @@ public class CalculateCostServiceTest {
         ElectricityReading otherReadings = new ElectricityReading(endTime.minusSeconds(2000),BigDecimal.valueOf(8));
         List<ElectricityReading> readings = Arrays.asList(reading,otherReadings);
         Mockito.when(meterReadingService.getPrevWeekReadingsBySmartId(SMART_METER_ID)).thenReturn(Optional.of(readings));
-
-
+        PricePlan plan = new PricePlan("price_plan_name","GreenEnergy",BigDecimal.TEN);
+        Mockito.when(pricePlanService.findPricePlanBySmartMeterId(SMART_METER_ID)).thenReturn(plan);
 
         assertThat(service.calculateCostOfPrevWeek(SMART_METER_ID)).isEqualTo(BigDecimal.TEN);
     }

@@ -82,4 +82,12 @@ class PricePlanServiceTest {
         pricePlanPos.add(PricePlanPo.build(pricePlan3));
         return pricePlanPos;
     }
+
+    @Test
+    void givenSmartIdShouldReturnPricePlan(){
+        PricePlan pricePlan = new PricePlan("plan_name","evil",BigDecimal.ONE);
+        String smartMeterId = "smart_meter_id";
+        Mockito.when(pricePlanRepo.findOneBySmartMeterId(smartMeterId)).thenReturn(PricePlanPo.build(pricePlan));
+        assertThat(service.findPricePlanBySmartMeterId(smartMeterId).getPlanName()).isEqualTo("plan_name");
+    }
 }

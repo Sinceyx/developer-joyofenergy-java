@@ -74,4 +74,7 @@ public class PricePlanService {
         return BigDecimal.valueOf(Duration.between(first.getTime(), last.getTime()).getSeconds() / SECONDS_PER_HOUR);
     }
 
+    public PricePlan findPricePlanBySmartMeterId(String smartMeterId) {
+        return PricePlan.build(pricePlanRepo.findOneBySmartMeterId(smartMeterId));
+    }
 }
