@@ -16,7 +16,7 @@ public class MeterReadingPo {
     @Column(name = "smart_meter_id")
     private String smartMeterId;
 
-    @Column(name = "time")
+    @Column(name = "read_time")
     private Instant time;
 
     @Column(name = "reading")

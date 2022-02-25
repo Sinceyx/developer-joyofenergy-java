@@ -2,6 +2,7 @@ package uk.tw.energy.service;
 
 import org.springframework.stereotype.Service;
 import uk.tw.energy.domain.ElectricityReading;
+import uk.tw.energy.domain.PricePlan;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,8 +20,7 @@ public class CalculateCostService {
 
     public BigDecimal calculateCostOfPrevWeek(String smartMeterId) {
         List<ElectricityReading> prevWeekReadings = meterReadingService.getPrevWeekReadingsBySmartId(smartMeterId).get();
-        return BigDecimal.TEN;
+        PricePlan pricePlan = pricePlanService.findPricePlanBySmartMeterId(smartMeterId);
+        return pricePlanService.calculateCost(prevWeekReadings,pricePlan);
     }
-
-
 }

@@ -5,8 +5,11 @@ import uk.tw.energy.dao.MeterReadingRepo;
 import uk.tw.energy.domain.ElectricityReading;
 import uk.tw.energy.po.MeterReadingPo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,12 +37,14 @@ public class MeterReadingService {
         meterReadingRepo.saveAll(meterReadingPos);
     }
 
-    public Optional<List<ElectricityReading>> getPrevWeekReadingsBySmartId(String smartId){
+    public Optional<List<ElectricityReading>> getPrevWeekReadingsBySmartId(String smartId) {
         Instant eightDaysAgo = Instant.now().minusSeconds(60*60*24*8);
         Instant oneDayAgo = Instant.now().minusSeconds(60*60*24*1);
-        Optional<List<MeterReadingPo>> meterReadingPos = meterReadingRepo.findBySmartMeterIdWithStartTimeAndEndTime(smartId,eightDaysAgo,oneDayAgo);
+        Optional<List<MeterReadingPo>> meterReadingPos = meterReadingRepo.findBySmartMeterIdWithStartTimeAndEndTime(smartId, Date.from(eightDaysAgo),Date.from(oneDayAgo));
         List<ElectricityReading> electricityReadings = new ArrayList<>();
-        meterReadingPos.ifPresent(list -> electricityReadings.addAll(list.stream().map(ele -> new ElectricityReading(ele.getTime(), ele.getReading())).collect(Collectors.toList())));
+        if(meterReadingPos.isPresent()){
+            electricityReadings.addAll(meterReadingPos.get().stream().map(ele->new ElectricityReading(ele.getTime(),ele.getReading())).collect(Collectors.toList()));
+        }
         return Optional.of(electricityReadings);
     }
 }

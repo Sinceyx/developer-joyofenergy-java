@@ -54,7 +54,7 @@ public class PricePlanService {
         return Optional.of(pricePlans.stream().collect(Collectors.toMap(PricePlanPo::getPlanName, t -> calculateCost(electricityReadings.get(),PricePlan.build(t)))));
     }
 
-    private BigDecimal calculateCost(List<ElectricityReading> electricityReadings, PricePlan pricePlan) {
+    public BigDecimal calculateCost(List<ElectricityReading> electricityReadings, PricePlan pricePlan) {
         BigDecimal average = calculateAverageReading(electricityReadings);
         BigDecimal timeElapsed = calculateTimeElapsed(electricityReadings);
         BigDecimal averagedCost = average.divide(timeElapsed, RoundingMode.HALF_UP);

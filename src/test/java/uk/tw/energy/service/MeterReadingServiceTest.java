@@ -12,10 +12,7 @@ import uk.tw.energy.po.MeterReadingPo;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -53,7 +50,7 @@ public class MeterReadingServiceTest {
         MeterReadingPo meterReadingPoOfTheDayPast8 = new MeterReadingPo(smartId,startTime.plusSeconds(1000),BigDecimal.valueOf(0.9));
         MeterReadingPo meterReadingPoOfTheDayPast1 = new MeterReadingPo(smartId,endTime.minusSeconds(1000),BigDecimal.valueOf(2.3));
         List<MeterReadingPo> readings = Arrays.asList(meterReadingPoOfTheDayPast8,meterReadingPoOfTheDayPast1);
-        Mockito.when(meterReadingRepo.findBySmartMeterIdWithStartTimeAndEndTime(smartId,startTime,endTime)).thenReturn(Optional.of(readings));
+        Mockito.when(meterReadingRepo.findBySmartMeterIdWithStartTimeAndEndTime(smartId, Date.from(startTime),Date.from(endTime))).thenReturn(Optional.of(readings));
         Optional<List<ElectricityReading>> meterReadingPos = meterReadingService.getPrevWeekReadingsBySmartId(smartId);
         boolean actual = false;
         if(meterReadingPos.isPresent()){

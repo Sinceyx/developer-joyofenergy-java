@@ -11,7 +11,6 @@ import uk.tw.energy.domain.PricePlan;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +44,8 @@ public class CalculateCostServiceTest {
         Mockito.when(meterReadingService.getPrevWeekReadingsBySmartId(SMART_METER_ID)).thenReturn(Optional.of(readings));
         PricePlan plan = new PricePlan("price_plan_name","GreenEnergy",BigDecimal.TEN);
         Mockito.when(pricePlanService.findPricePlanBySmartMeterId(SMART_METER_ID)).thenReturn(plan);
-
-        assertThat(service.calculateCostOfPrevWeek(SMART_METER_ID)).isEqualTo(BigDecimal.TEN);
+        BigDecimal expect = BigDecimal.TEN;
+        Mockito.when(pricePlanService.calculateCost(readings,plan)).thenReturn(expect);
+        assertThat(service.calculateCostOfPrevWeek(SMART_METER_ID)).isEqualTo(expect);
     }
 }
