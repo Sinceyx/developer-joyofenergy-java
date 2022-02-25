@@ -90,4 +90,13 @@ class PricePlanServiceTest {
         Mockito.when(pricePlanRepo.findOneBySmartMeterId(smartMeterId)).thenReturn(PricePlanPo.build(pricePlan));
         assertThat(service.findPricePlanBySmartMeterId(smartMeterId).getPlanName()).isEqualTo("plan_name");
     }
+
+    @Test
+    void givenElectricityReadingListAndPricePlanShouldReturnCost(){
+        PricePlan pricePlan = new PricePlan("plan_name","evil",BigDecimal.ONE);
+        ElectricityReading electricityReading = new ElectricityReading(Instant.now().minusSeconds(7200), BigDecimal.valueOf(15.0));
+        ElectricityReading otherReading = new ElectricityReading(Instant.now(), BigDecimal.valueOf(5.0));
+        BigDecimal expected = BigDecimal.valueOf(20.0);
+        assertThat(service.calculateCost(Arrays.asList(electricityReading,otherReading),pricePlan).longValue()).isEqualTo(expected.longValue());
+    }
 }

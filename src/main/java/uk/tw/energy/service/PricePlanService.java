@@ -8,6 +8,7 @@ import uk.tw.energy.po.PeakTimeMultiplierPo;
 import uk.tw.energy.po.PricePlanPo;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.util.Comparator;
@@ -57,7 +58,7 @@ public class PricePlanService {
     public BigDecimal calculateCost(List<ElectricityReading> electricityReadings, PricePlan pricePlan) {
         BigDecimal average = calculateAverageReading(electricityReadings);
         BigDecimal timeElapsed = calculateTimeElapsed(electricityReadings);
-        BigDecimal averagedCost = average.divide(timeElapsed, RoundingMode.HALF_UP);
+        BigDecimal averagedCost = average.multiply(timeElapsed, MathContext.DECIMAL32);
         return averagedCost.multiply(pricePlan.getUnitRate());
     }
 
