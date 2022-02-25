@@ -42,9 +42,7 @@ public class MeterReadingService {
         Instant oneDayAgo = Instant.now().minusSeconds(60*60*24*1);
         Optional<List<MeterReadingPo>> meterReadingPos = meterReadingRepo.findBySmartMeterIdWithStartTimeAndEndTime(smartId, Date.from(eightDaysAgo),Date.from(oneDayAgo));
         List<ElectricityReading> electricityReadings = new ArrayList<>();
-        if(meterReadingPos.isPresent()){
-            electricityReadings.addAll(meterReadingPos.get().stream().map(ele->new ElectricityReading(ele.getTime(),ele.getReading())).collect(Collectors.toList()));
-        }
+        meterReadingPos.ifPresent(list -> electricityReadings.addAll(list.stream().map(ele -> new ElectricityReading(ele.getTime(), ele.getReading())).collect(Collectors.toList())));
         return Optional.of(electricityReadings);
     }
 }

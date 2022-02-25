@@ -6,6 +6,7 @@ import uk.tw.energy.domain.PricePlan;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CalculateCostService {
@@ -19,8 +20,12 @@ public class CalculateCostService {
     }
 
     public BigDecimal calculateCostOfPrevWeek(String smartMeterId) {
-        List<ElectricityReading> prevWeekReadings = meterReadingService.getPrevWeekReadingsBySmartId(smartMeterId).get();
+        Optional<List<ElectricityReading>> prevWeekReadings = meterReadingService.getPrevWeekReadingsBySmartId(smartMeterId);
         PricePlan pricePlan = pricePlanService.findPricePlanBySmartMeterId(smartMeterId);
-        return pricePlanService.calculateCost(prevWeekReadings,pricePlan);
+        if(prevWeekReadings.isPresent()){
+            return pricePlanService.calculateCost(prevWeekReadings.get(),pricePlan);
+        }else {
+            return BigDecimal.ZERO;
+        }
     }
 }

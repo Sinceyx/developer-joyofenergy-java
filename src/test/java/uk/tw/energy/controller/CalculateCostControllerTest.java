@@ -28,11 +28,6 @@ public class CalculateCostControllerTest {
     }
 
     @Test
-    public void givenSmartMeterIdShouldResponseOK(){
-        assertThat(controller.calculatePrevWeekCost(SMART_METER_ID).getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
     public void givenSmartMeterIdShouldReturnCostOfPrevWeek(){
         BigDecimal expected = BigDecimal.ONE;
         Mockito.when(service.calculateCostOfPrevWeek(SMART_METER_ID)).thenReturn(expected);

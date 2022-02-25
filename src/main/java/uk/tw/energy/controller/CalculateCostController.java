@@ -22,7 +22,9 @@ public class CalculateCostController {
     @RequestMapping("/prev-week-cost/{smartMeterId}")
     public ResponseEntity<BigDecimal> calculatePrevWeekCost(String smartMeterId) {
         BigDecimal cost = service.calculateCostOfPrevWeek(smartMeterId);
-        return ResponseEntity.ok(cost);
+        return cost.equals(BigDecimal.ZERO)
+                ?ResponseEntity.notFound().build()
+                :ResponseEntity.ok(cost);
     }
 }
 
