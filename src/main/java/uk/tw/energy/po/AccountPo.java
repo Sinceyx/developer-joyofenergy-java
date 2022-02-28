@@ -13,7 +13,7 @@ public class AccountPo {
     @Column(name = "smart_meter_id",length = 64)
     private String smartMeterId;
     @Column(name = "price_plan_id",length = 128)
-    private String pricePlanId;
+    private Long pricePlanId;
 
     public String getSmartMeterId() {
         return smartMeterId;
@@ -23,11 +23,11 @@ public class AccountPo {
         this.smartMeterId = smartMeterId;
     }
 
-    public String getPricePlanId() {
+    public Long getPricePlanId() {
         return pricePlanId;
     }
 
-    public void setPricePlanId(String pricePlanId) {
+    public void setPricePlanId(Long pricePlanId) {
         this.pricePlanId = pricePlanId;
     }
 }

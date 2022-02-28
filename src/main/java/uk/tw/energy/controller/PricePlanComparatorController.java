@@ -33,7 +33,7 @@ public class PricePlanComparatorController {
 
     @GetMapping("/compare-all/{smartMeterId}")
     public ResponseEntity<Map<String, Object>> calculatedCostForEachPricePlan(@PathVariable String smartMeterId) {
-        Optional<String> pricePlanId = Optional.ofNullable(accountService.getPricePlanIdForSmartMeterId(smartMeterId));
+        Optional<Long> pricePlanId = Optional.ofNullable(accountService.getPricePlanIdForSmartMeterId(smartMeterId));
         if(!pricePlanId.isPresent()){
             return ResponseEntity.notFound().build();
         }

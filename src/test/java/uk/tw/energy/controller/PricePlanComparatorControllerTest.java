@@ -18,9 +18,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 public class PricePlanComparatorControllerTest {
 
     private final static String PRICE_PLAN_ID_KEY = "pricePlanId";
-    private static final String PRICE_PLAN_1_ID = "test-supplier";
-    private static final String PRICE_PLAN_2_ID = "best-supplier";
-    private static final String PRICE_PLAN_3_ID = "second-best-supplier";
+    private static final Long PRICE_PLAN_1_ID = 1L;
+    private static final Long PRICE_PLAN_2_ID = 2L;
+    private static final Long PRICE_PLAN_3_ID = 3L;
     private static final String SMART_METER_ID = "smart-meter-id";
     private static final String PRICE_PLAN_COMPARISONS_KEY = "pricePlanComparisons";
     @InjectMocks
@@ -39,9 +39,9 @@ public class PricePlanComparatorControllerTest {
     public void givenExistSmartMeterIdShouldCalculateCostByMeterReadingsForEveryPricePlan() {
         Mockito.when(accountService.getPricePlanIdForSmartMeterId(SMART_METER_ID)).thenReturn(PRICE_PLAN_1_ID);
         Map<String,BigDecimal> map = new HashMap<>();
-        map.put(PRICE_PLAN_1_ID,BigDecimal.ONE);
-        map.put(PRICE_PLAN_2_ID,BigDecimal.TEN);
-        map.put(PRICE_PLAN_3_ID,BigDecimal.ZERO);
+        map.put(String.valueOf(PRICE_PLAN_1_ID),BigDecimal.ONE);
+        map.put(String.valueOf(PRICE_PLAN_2_ID),BigDecimal.TEN);
+        map.put(String.valueOf(PRICE_PLAN_3_ID),BigDecimal.ZERO);
         Mockito.when(pricePlanService.getConsumptionCostOfElectricityReadingsForEachPricePlan(SMART_METER_ID))
                 .thenReturn(Optional.of(map));
         Map<String,Object> expected = new HashMap<>();
@@ -54,9 +54,9 @@ public class PricePlanComparatorControllerTest {
     @Test
     public void shouldRecommendCheapestPricePlansNoLimitForMeterUsage() {
         Map<String,BigDecimal> map = new HashMap<>();
-        map.put(PRICE_PLAN_1_ID,BigDecimal.ONE);
-        map.put(PRICE_PLAN_2_ID,BigDecimal.TEN);
-        map.put(PRICE_PLAN_3_ID,BigDecimal.valueOf(8L));
+        map.put(String.valueOf(PRICE_PLAN_1_ID),BigDecimal.ONE);
+        map.put(String.valueOf(PRICE_PLAN_2_ID),BigDecimal.TEN);
+        map.put(String.valueOf(PRICE_PLAN_3_ID),BigDecimal.valueOf(8L));
         Mockito.when(pricePlanService.getConsumptionCostOfElectricityReadingsForEachPricePlan(SMART_METER_ID)).thenReturn(Optional.of(map));
 
         List<Map.Entry<String,BigDecimal>> expected  = new ArrayList<>(map.entrySet());
@@ -70,9 +70,9 @@ public class PricePlanComparatorControllerTest {
     public void shouldRecommendLimitedCheapestPricePlansForMeterUsage() {
         int limit = 2;
         Map<String,BigDecimal> map = new HashMap<>();
-        map.put(PRICE_PLAN_1_ID,BigDecimal.ONE);
-        map.put(PRICE_PLAN_2_ID,BigDecimal.TEN);
-        map.put(PRICE_PLAN_3_ID,BigDecimal.valueOf(8L));
+        map.put(String.valueOf(PRICE_PLAN_1_ID),BigDecimal.ONE);
+        map.put(String.valueOf(PRICE_PLAN_2_ID),BigDecimal.TEN);
+        map.put(String.valueOf(PRICE_PLAN_3_ID),BigDecimal.valueOf(8L));
         Mockito.when(pricePlanService.getConsumptionCostOfElectricityReadingsForEachPricePlan(SMART_METER_ID)).thenReturn(Optional.of(map));
 
         List<Map.Entry<String,BigDecimal>> expected  = new ArrayList<>(map.entrySet());
@@ -86,9 +86,9 @@ public class PricePlanComparatorControllerTest {
 
         int limit = 10;
         Map<String,BigDecimal> map = new HashMap<>();
-        map.put(PRICE_PLAN_1_ID,BigDecimal.ONE);
-        map.put(PRICE_PLAN_2_ID,BigDecimal.TEN);
-        map.put(PRICE_PLAN_3_ID,BigDecimal.valueOf(8L));
+        map.put(String.valueOf(PRICE_PLAN_1_ID),BigDecimal.ONE);
+        map.put(String.valueOf(PRICE_PLAN_2_ID),BigDecimal.TEN);
+        map.put(String.valueOf(PRICE_PLAN_3_ID),BigDecimal.valueOf(8L));
         Mockito.when(pricePlanService.getConsumptionCostOfElectricityReadingsForEachPricePlan(SMART_METER_ID)).thenReturn(Optional.of(map));
 
         List<Map.Entry<String,BigDecimal>> expected  = new ArrayList<>(map.entrySet());

@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
 import uk.tw.energy.service.CalculateCostService;
 
 import java.math.BigDecimal;
@@ -20,7 +19,7 @@ public class CalculateCostControllerTest {
     @Mock
     private CalculateCostService service;
 
-    private static final String SMART_METER_ID = "smart_meter_id";
+    private static final String SMART_METER_ID = "bob";
 
     @BeforeEach
     public void setUp() {

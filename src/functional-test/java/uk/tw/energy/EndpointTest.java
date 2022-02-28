@@ -64,6 +64,15 @@ public class EndpointTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
+    @Test
+    public void givenMeterIdShouldReturnCostOfPrevWeek()  {
+        String smartMeterId = "bob";
+        ResponseEntity<String> response =
+                restTemplate.getForEntity("/calculate-cost/prev-week-cost/" + smartMeterId, String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+
     private HttpEntity<String> getStringHttpEntity(Object object) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

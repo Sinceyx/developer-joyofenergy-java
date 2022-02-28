@@ -78,6 +78,13 @@ public class PricePlanPo {
         this.peakTimeMultipliers = peakTimeMultipliers;
     }
 
+    public PricePlanPo(Long pricePlanId, String energySupplier, String planName, BigDecimal unitRate) {
+        this.pricePlanId = pricePlanId;
+        this.energySupplier = energySupplier;
+        this.planName = planName;
+        this.unitRate = unitRate;
+    }
+
     public static PricePlanPo build(PricePlan pricePlan){
         return new PricePlanPo(pricePlan.getEnergySupplier(), pricePlan.getPlanName(), pricePlan.getUnitRate(),pricePlan.getPeakTimeMultipliers()!=null&&!pricePlan.getPeakTimeMultipliers().isEmpty()?pricePlan.getPeakTimeMultipliers().stream().map(PeakTimeMultiplierPo::build).collect(Collectors.toList()):null);
     }

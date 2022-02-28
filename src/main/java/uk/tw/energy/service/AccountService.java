@@ -14,7 +14,7 @@ public class AccountService {
         this.accountRepo = accountRepo;
     }
 
-    public String getPricePlanIdForSmartMeterId(String smartMeterId) {
+    public Long getPricePlanIdForSmartMeterId(String smartMeterId) {
         return accountRepo.findBySmartMeterId(smartMeterId).getPricePlanId();
     }
 }

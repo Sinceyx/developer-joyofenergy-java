@@ -30,7 +30,7 @@ public class MeterReadingServiceTest {
 
     @Test
     public void givenMeterIdThatDoesNotExistShouldReturnNull() {
-        Mockito.when(meterReadingRepo.findBySmartMeterId("unknown-id")).thenReturn(Optional.empty());
+        Mockito.when(meterReadingRepo.findBySmartMeterId("unknown-id")).thenReturn(new ArrayList<>());
         assertThat(meterReadingService.getReadings("unknown-id")).isEqualTo(Optional.empty());
     }
 
@@ -38,7 +38,7 @@ public class MeterReadingServiceTest {
     public void givenMeterReadingThatExistsShouldReturnMeterReadings() {
         List<MeterReadingPo> expectResult = new ArrayList<>();
 
-        Mockito.when(meterReadingRepo.findBySmartMeterId("random-id")).thenReturn(Optional.of(expectResult));
+        Mockito.when(meterReadingRepo.findBySmartMeterId("random-id")).thenReturn(expectResult);
         assertThat(meterReadingService.getReadings("random-id")).isEqualTo(Optional.of(expectResult));
     }
 
@@ -50,7 +50,7 @@ public class MeterReadingServiceTest {
         MeterReadingPo meterReadingPoOfTheDayPast8 = new MeterReadingPo(smartId,startTime.plusSeconds(1000),BigDecimal.valueOf(0.9));
         MeterReadingPo meterReadingPoOfTheDayPast1 = new MeterReadingPo(smartId,endTime.minusSeconds(1000),BigDecimal.valueOf(2.3));
         List<MeterReadingPo> readings = Arrays.asList(meterReadingPoOfTheDayPast8,meterReadingPoOfTheDayPast1);
-        Mockito.when(meterReadingRepo.findBySmartMeterIdWithStartTimeAndEndTime(smartId, Date.from(startTime),Date.from(endTime))).thenReturn(Optional.of(readings));
+        Mockito.when(meterReadingRepo.findBySmartMeterIdAndTimeBetween(smartId, startTime,endTime)).thenReturn(readings);
         Optional<List<ElectricityReading>> meterReadingPos = meterReadingService.getPrevWeekReadingsBySmartId(smartId);
         boolean actual = false;
         if(meterReadingPos.isPresent()){
