@@ -9,9 +9,6 @@ import org.mockito.MockitoAnnotations;
 import uk.tw.energy.dao.AccountRepo;
 import uk.tw.energy.po.AccountPo;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AccountPoServiceTest {
